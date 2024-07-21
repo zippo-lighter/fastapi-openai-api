@@ -1,4 +1,5 @@
 from openai import OpenAI
+from io import BytesIO
 
 OPENAI_API_KEY = "YOUR_API_KEY"  # Replace with your OpenAI API key
 
@@ -6,9 +7,12 @@ if OPENAI_API_KEY == "YOUR_API_KEY":
     raise ValueError("Please set your OpenAI API key inside the openai_lib.py file")
 
 client = OpenAI(
-    api_key='OPENAI_API_KEY'
     api_key=OPENAI_API_KEY
 )
+# region OWN_LOGIC 
+
+
+# endregion
 
 # region ASSISTANTS
 
@@ -84,9 +88,10 @@ def list_messages_in_thread(thread_id: str, run_id: str = None):
 
 # region FILES
 
-def upload_file_in_open_ai( file_name: str):
+def upload_file_in_open_ai( file_stream: BytesIO):
+    file_stream.seek(0)
     uploaded_file = client.files.create(
-        file=open(file_name, "rb"),
+        file=file_stream,
         purpose="assistants"
     )
     return uploaded_file

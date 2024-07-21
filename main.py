@@ -1,6 +1,7 @@
 from typing import Union
 import json, sys, os
 from fastapi import FastAPI, UploadFile, Response, status
+from io import BytesIO
 from .docs_text import description as docs_description
 
 
@@ -33,9 +34,14 @@ def create_new_thread():
 
 @app.post("/upload-file/{file_name}", status_code= status.HTTP_200_OK)
 def upload_file(file: UploadFile, response: Response):
+    if file is None or file.file is None:
+            response.status_code = status.HTTP_400_BAD_REQUEST
+            return {"message": "No file uploaded"}
+
     try:
-        contents = file.file.read()
-        handel_file = upload_file_in_open_ai(file.filename)
+        file_contents = file.file.read()
+        file_stream = BytesIO(file_contents)
+        handel_file = upload_file_in_open_ai(file_stream)
         if handel_file.status == 'processed':
             response.status_code = status.HTTP_200_OK
             return {"message": f"Successfully uploaded file to OpenAI",
