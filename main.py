@@ -3,6 +3,7 @@ import json, sys, os
 from fastapi import FastAPI, UploadFile, Response, status
 from io import BytesIO
 from .docs_text import description as docs_description
+from .sequence import sequence_upload_file
 
 
 
@@ -74,6 +75,30 @@ def retrieve_message(message_id: str, thread_id: str):
 def list_messages(thread_id: str, run_id: str = None):
     thread_messages = list_messages_in_thread(thread_id=thread_id, run_id=run_id)
     return thread_messages
+
+
+@app.post("/diagram-file/{file_name}", status_code= status.HTTP_200_OK)
+def upload_diagram_file(file: UploadFile, response: Response):
+    if file is None or file.file is None:
+            response.status_code = status.HTTP_400_BAD_REQUEST
+            return {"message": "No file uploaded"}
+
+    try:
+        file_contents = file.file.read()
+        file_stream = BytesIO(file_contents)
+        handel_file = sequence_upload_file(file_stream)
+        if handel_file.status == 'processed':
+            response.status_code = status.HTTP_200_OK
+            return {"message": f"Successfully uploaded file to OpenAI",
+                     "file_id": {handel_file.id}}
+        else:
+            response.status_code = status.HTTP_204_NO_CONTENT
+            return {"message": f"File is not processed"}
+    except Exception as ex:
+        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        return {"message": "There was an error uploading the file"}
+    finally:
+        file.file.close()
 
 
 @app.get("/")
