@@ -23,14 +23,9 @@ def sequence_upload_file(file_stream: BytesIO, assistant_id: str = ASSISTANT_DIA
                                                 file_id=file_id)
 
     # 4 - Run thread
-    run_thread = run_thread_in_opena_ai(thread_id=thread_id, assistant_id=assistant_id)
-    run_id = run_thread.id
-
+    run_thread = run_thread_in_opena_ai(thread_id=thread_id, assistant_id=assistant_id, is_stream=True)
+    
     # 5 - Retrieve thread messages
-    thread_messages = list_messages_in_thread(thread_id=thread_id, run_id=run_id)
+    thread_messages = list_messages_in_thread(thread_id=thread_id)
     return thread_messages
 
-
-
-
-    return uploaded_file

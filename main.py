@@ -87,10 +87,9 @@ def upload_diagram_file(file: UploadFile, response: Response):
         file_contents = file.file.read()
         file_stream = BytesIO(file_contents)
         handel_file = sequence_upload_file(file_stream)
-        if handel_file.status == 'processed':
+        if len(handel_file.data) > 0:
             response.status_code = status.HTTP_200_OK
-            return {"message": f"Successfully uploaded file to OpenAI",
-                     "file_id": {handel_file.id}}
+            return handel_file.data
         else:
             response.status_code = status.HTTP_204_NO_CONTENT
             return {"message": f"File is not processed"}

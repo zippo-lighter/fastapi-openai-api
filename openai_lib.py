@@ -55,8 +55,12 @@ def get_thread_by_id(id: str):
     thread = client.beta.threads.retrieve(id)
     return thread
 
-def run_thread_in_opena_ai(thread_id: str, assistant_id: str):
-    run_thread = client.beta.threads.runs.create(thread_id=thread_id, assistant_id=assistant_id)
+def run_thread_in_opena_ai(thread_id: str, assistant_id: str, is_stream: bool = False):
+    run_thread = client.beta.threads.runs.create(thread_id=thread_id, assistant_id=assistant_id, stream=is_stream)
+    if is_stream:
+        for line in run_thread:
+            if line.event == "thread.run.completed":
+                break
     return run_thread
 
 #endregion
