@@ -6,7 +6,7 @@ if OPENAI_API_KEY == "YOUR_API_KEY":
     raise ValueError("Please set your OpenAI API key inside the openai_lib.py file")
 
 client = OpenAI(
-    api_key='OPENAI_API_KEY'
+    api_key=OPENAI_API_KEY
 )
 
 # region ASSISTANTS
