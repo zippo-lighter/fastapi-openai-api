@@ -11,7 +11,7 @@ To install and run the project, follow these steps:
 3. Activate it
 4. Run `pip install -r requirements.txt` Alternativelly install following packages `pip install fastapi openai`
 5. Insert your OpenAI API secret key
-6. Run the project using `fastapi run`
+6. Run the project using `fastapi dev`
 7. Navigate to http://localhost:8000/docs to check the available endpoints
 
 
