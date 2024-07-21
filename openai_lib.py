@@ -7,6 +7,7 @@ if OPENAI_API_KEY == "YOUR_API_KEY":
 
 client = OpenAI(
     api_key='OPENAI_API_KEY'
+    api_key=OPENAI_API_KEY
 )
 
 # region ASSISTANTS
